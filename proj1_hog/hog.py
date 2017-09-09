@@ -20,19 +20,51 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
-    "*** REPLACE THIS LINE ***"
+    zero_times = 0
+    sum = 0
+    while num_rolls > 0:
+        this = dice()
+        sum += this
+        if this == 1:
+            zero_times += 1
+        num_rolls -= 1
+    if zero_times != 0:
+        return 1
+    else:
+        return sum
     # END PROBLEM 1
 
 
 def free_bacon(opponent_score):
     """Return the points scored from rolling 0 dice (Free Bacon)."""
     # BEGIN PROBLEM 2
-    "*** REPLACE THIS LINE ***"
+    max = 0
+    while opponent_score > 0:
+        this = opponent_score % 10
+        opponent_score //= 10
+        if max < this:
+            max = this
+    return max + 1
     # END PROBLEM 2
 
 
 # Write your prime functions here!
 
+def is_prime(num):
+    i = 2
+    if num == 1:
+        return False
+    while i <= num ** (1/2):
+        if num % i == 0:
+            return False
+        i += 1
+    return True
+
+def next_prime(num):
+    while True:
+        num += 1
+        if is_prime(num):
+            return num
 
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free Bacon).
@@ -49,7 +81,16 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
-    "*** REPLACE THIS LINE ***"
+    if num_rolls == 0:
+        result = free_bacon(opponent_score)
+    else:
+        result = roll_dice(num_rolls, dice)
+    if is_prime(result):
+        return next_prime(result)
+    else:
+        return result
+
+
     # END PROBLEM 2
 
 
@@ -59,8 +100,10 @@ def select_dice(dice_swapped):
     play.
     """
     # BEGIN PROBLEM 3
-    "*** REPLACE THIS LINE ***"
-    return six_sided  # Replace this statement
+    if dice_swapped:
+        return four_sided
+    else:
+        return six_sided  # Replace this statement
     # END PROBLEM 3
 
 
@@ -70,14 +113,28 @@ def select_dice(dice_swapped):
 def is_perfect_piggy(turn_score):
     """Returns whether the Perfect Piggy dice-swapping rule should occur."""
     # BEGIN PROBLEM 4
-    "*** REPLACE THIS LINE ***"
+    if turn_score == 1:
+        return False
+    else:
+        n = 2
+        while True:
+            if (n * n == turn_score) | (n * n * n == turn_score):
+                return True
+            elif (n * n > turn_score) & (n * n * n > turn_score):
+                return False
+            else:
+                n += 1
+                
     # END PROBLEM 4
 
 
 def is_swap(score0, score1):
     """Returns whether one of the scores is double the other."""
     # BEGIN PROBLEM 5
-    "*** REPLACE THIS LINE ***"
+    if score0 * 2 == score1 | score1 * 2 == score0:
+        return True
+    else:
+        return False
     # END PROBLEM 5
 
 
@@ -108,7 +165,25 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     dice_swapped = False # Whether 4-sided dice have been swapped for 6-sided
     # BEGIN PROBLEM 6
-    "*** REPLACE THIS LINE ***"
+    while score0 < goal & score1 < goal:
+        strategy_player0 = strategy0(score0, score1)
+        t_turn_score = take_turn(strategy_player0, score1, select_dice(dice_swapped))
+        score0 += t_turn_score
+        if is_perfect_piggy(t_turn_score):
+            dice_swapped = not dice_swapped
+        if is_swap(score0, score1):
+            score0, score1 = score1, score0
+        if score0 >= goal | score1 >= goal:
+            break
+        strategy_player1 = strategy1(score1, score0)
+        t_turn_score = take_turn(strategy_player1, score0, select_dice(dice_swapped))
+        score1 += t_turn_score
+        if is_perfect_piggy(t_turn_score):
+            dice_swapped = not dice_swapped
+        if is_swap(score0, score1):
+            score0, score1 = score1, score0
+
+
     # END PROBLEM 6
     return score0, score1
 
