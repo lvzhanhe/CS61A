@@ -9,6 +9,7 @@ GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 # Phase 1: Simulator #
 ######################
 
+
 def roll_dice(num_rolls, dice=six_sided):
     """Simulate rolling the DICE exactly NUM_ROLLS > 0 times. Return the sum of
     the outcomes unless any of the outcomes is 1. In that case, return 1.
@@ -50,21 +51,24 @@ def free_bacon(opponent_score):
 
 # Write your prime functions here!
 
+
 def is_prime(num):
     i = 2
     if num == 1:
         return False
-    while i <= num ** (1/2):
+    while i <= num**(1 / 2):
         if num % i == 0:
             return False
         i += 1
     return True
+
 
 def next_prime(num):
     while True:
         num += 1
         if is_prime(num):
             return num
+
 
 def take_turn(num_rolls, opponent_score, dice=six_sided):
     """Simulate a turn rolling NUM_ROLLS dice, which may be 0 (Free Bacon).
@@ -89,7 +93,6 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
         return next_prime(result)
     else:
         return result
-
 
     # END PROBLEM 2
 
@@ -124,7 +127,7 @@ def is_perfect_piggy(turn_score):
                 return False
             else:
                 n += 1
-                
+
     # END PROBLEM 4
 
 
@@ -163,11 +166,12 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     score1:     The starting score for Player 1
     """
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
-    dice_swapped = False # Whether 4-sided dice have been swapped for 6-sided
+    dice_swapped = False  # Whether 4-sided dice have been swapped for 6-sided
     # BEGIN PROBLEM 6
     while score0 < goal & score1 < goal:
         strategy_player0 = strategy0(score0, score1)
-        t_turn_score = take_turn(strategy_player0, score1, select_dice(dice_swapped))
+        t_turn_score = take_turn(strategy_player0, score1,
+                                 select_dice(dice_swapped))
         score0 += t_turn_score
         if is_perfect_piggy(t_turn_score):
             dice_swapped = not dice_swapped
@@ -176,13 +180,13 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
         if score0 >= goal | score1 >= goal:
             break
         strategy_player1 = strategy1(score1, score0)
-        t_turn_score = take_turn(strategy_player1, score0, select_dice(dice_swapped))
+        t_turn_score = take_turn(strategy_player1, score0,
+                                 select_dice(dice_swapped))
         score1 += t_turn_score
         if is_perfect_piggy(t_turn_score):
             dice_swapped = not dice_swapped
         if is_swap(score0, score1):
             score0, score1 = score1, score0
-
 
     # END PROBLEM 6
     return score0, score1
@@ -191,6 +195,7 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
 #######################
 # Phase 2: Strategies #
 #######################
+
 
 def always_roll(n):
     """Return a strategy that always rolls N dice.
@@ -205,8 +210,10 @@ def always_roll(n):
     >>> strategy(99, 99)
     5
     """
+
     def strategy(score, opponent_score):
         return n
+
     return strategy
 
 
@@ -229,8 +236,8 @@ def check_strategy_roll(score, opponent_score, num_rolls):
      ...
     AssertionError: strategy(0, 0) returned None (not an integer)
     """
-    msg = 'strategy({}, {}) returned {}'.format(
-        score, opponent_score, num_rolls)
+    msg = 'strategy({}, {}) returned {}'.format(score, opponent_score,
+                                                num_rolls)
     assert type(num_rolls) == int, msg + ' (not an integer)'
     assert 0 <= num_rolls <= 10, msg + ' (invalid number of rolls)'
 
@@ -260,11 +267,18 @@ def check_strategy(strategy, goal=GOAL_SCORE):
     AssertionError: strategy(102, 115) returned 100 (invalid number of rolls)
     """
     # BEGIN PROBLEM 7
-    "*** REPLACE THIS LINE ***"
+    score0 = 0
+    while score0 < goal:
+        score1 = 0
+        while score1 < goal:
+            check_strategy_roll(score0, score1, strategy(score0, score1))
+            score1 += 1
+        score0 += 1
     # END PROBLEM 7
 
 
 # Experiments
+
 
 def make_averaged(fn, num_samples=1000):
     """Return a function that returns the average_value of FN when called.
@@ -277,8 +291,15 @@ def make_averaged(fn, num_samples=1000):
     >>> averaged_dice()
     3.0
     """
+
     # BEGIN PROBLEM 8
-    "*** REPLACE THIS LINE ***"
+    def average(*args):
+        total = 0
+        for i in range(0, num_samples):
+            total += fn(*args)
+        return total / num_samples
+
+    return average
     # END PROBLEM 8
 
 
@@ -292,7 +313,14 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     1
     """
     # BEGIN PROBLEM 9
-    "*** REPLACE THIS LINE ***"
+    max_avg, max_avg_dice = 0, 0
+    make_avg = make_averaged(roll_dice)
+    for i in range(1, 11):
+        avg = make_avg(i, dice)
+        if avg > max_avg:
+            max_avg = avg
+            max_avg_dice = i
+    return max_avg_dice
     # END PROBLEM 9
 
 
@@ -337,15 +365,19 @@ def run_experiments():
 
 # Strategies
 
+
 def bacon_strategy(score, opponent_score, margin=8, num_rolls=4):
     """This strategy rolls 0 dice if that gives at least MARGIN points, and
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    "*** REPLACE THIS LINE ***"
-    return 4  # Replace this statement
+    digit_list = [int(num) for num in str(opponent_score)]
+    if max(digit_list) + 1 >= margin:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 10
-check_strategy(bacon_strategy)
+    check_strategy(bacon_strategy)
 
 
 def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
@@ -354,11 +386,19 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
     NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    "*** REPLACE THIS LINE ***"
-    return 4  # Replace this statement
+    digit_list = [int(num) for num in str(opponent_score)]
+    player = max(digit_list) + 1 + score
+    if player == (2 * opponent_score) or opponent_score == (2 * player):
+        if player < opponent_score:
+            return 0
+        else:
+            return num_rolls
+    else:
+        return bacon_strategy(player, opponent_score)
     # END PROBLEM 11
-check_strategy(swap_strategy)
 
+
+check_strategy(swap_strategy)
 
 
 def final_strategy(score, opponent_score):
@@ -370,8 +410,9 @@ def final_strategy(score, opponent_score):
     "*** REPLACE THIS LINE ***"
     return 4  # Replace this statement
     # END PROBLEM 12
-check_strategy(final_strategy)
 
+
+check_strategy(final_strategy)
 
 ##########################
 # Command Line Interface #
@@ -379,6 +420,7 @@ check_strategy(final_strategy)
 
 # NOTE: Functions in this section do not need to be changed. They use features
 # of Python not yet covered in the course.
+
 
 @main
 def run(*args):
@@ -388,8 +430,11 @@ def run(*args):
     """
     import argparse
     parser = argparse.ArgumentParser(description="Play Hog")
-    parser.add_argument('--run_experiments', '-r', action='store_true',
-                        help='Runs strategy experiments')
+    parser.add_argument(
+        '--run_experiments',
+        '-r',
+        action='store_true',
+        help='Runs strategy experiments')
 
     args = parser.parse_args()
 
