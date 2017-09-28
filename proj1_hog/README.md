@@ -16,3 +16,12 @@ To spice up the game, we will play with some special rules:
 - **Swine Swap**. After the turn score is added, if one of the scores is double the other, then the two scores are swapped.
   - *Example 1*: The current player has a total score of 37 and the opponent has 92. The current player rolls two dice that total 9. The current player's new total score (46) is half of the opponent's score. These scores are swapped! The current player now has 92 points and the opponent has 46. The turn ends.
   - *Example 2*: The current player has 91 and the opponent has 55. The current player rolls five dice that total 17, a prime that is boosted to 19 points for the turn (*Hogtimus Prime*). The current player has 110, so the scores are swapped. The opponent ends the turn with 110 and wins the game.
+
+
+
+You can also play against your final strategy with the graphical user interface:
+
+```
+python3 hog_gui.py -f
+```
+
