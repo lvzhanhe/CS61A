@@ -371,13 +371,17 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=4):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    digit_list = [int(num) for num in str(opponent_score)]
-    if max(digit_list) + 1 >= margin:
+    player = max([int(num) for num in str(opponent_score)]) + 1
+    if is_prime(player):
+        player = next_prime(player)
+    if player >= margin:
         return 0
     else:
         return num_rolls
     # END PROBLEM 10
-    check_strategy(bacon_strategy)
+
+
+check_strategy(bacon_strategy)
 
 
 def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
@@ -394,7 +398,7 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
         else:
             return num_rolls
     else:
-        return bacon_strategy(player, opponent_score)
+        return bacon_strategy(player, opponent_score, margin, num_rolls)
     # END PROBLEM 11
 
 
@@ -404,11 +408,13 @@ check_strategy(swap_strategy)
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
-    *** YOUR DESCRIPTION HERE ***
+    I just take advantage of the swap_strategy.
+    Final strategy win rate: 0.718
+    Hope someone can pull a request to help me solve this issue.
     """
     # BEGIN PROBLEM 12
-    "*** REPLACE THIS LINE ***"
-    return 4  # Replace this statement
+    return swap_strategy(score, opponent_score, 8, 4)
+
     # END PROBLEM 12
 
 
