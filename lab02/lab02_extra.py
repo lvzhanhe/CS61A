@@ -4,6 +4,7 @@ from lab02 import *
 
 # Higher Order Functions
 
+
 def count_cond(condition):
     """Returns a function with one parameter N that counts all the numbers from
     1 to N that satisfy the two-argument predicate function CONDITION.
@@ -29,7 +30,16 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+
+    def counter(n):
+        quantity = 0
+        for i in range(1, n + 1):
+            if condition(n, i):
+                quantity += 1
+        return quantity
+
+    return counter
+
 
 def cycle(f1, f2, f3):
     """Returns a function that is itself a higher-order function.
@@ -57,4 +67,18 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
+
+    def cheese(n):
+        def pizza(x):
+            for i in range(0, n):
+                if i % 3 == 0:
+                    x = f1(x)
+                elif i % 3 == 1:
+                    x = f2(x)
+                elif i % 3 == 2:
+                    x = f3(x)
+            return x
+
+        return pizza
+
+    return cheese
