@@ -2,6 +2,7 @@
 
 # Lambda Functions
 
+
 def lambda_curry2(func):
     """
     Returns a Curried version of a two-argument function FUNC.
@@ -11,10 +12,12 @@ def lambda_curry2(func):
     >>> add_three(5)
     8
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+
+    return lambda arg1: lambda arg2: func(arg1, arg2)
+
 
 # Higher Order Functions
+
 
 def compose1(f, g):
     """Return the composition function which given x, computes f(g(x)).
@@ -33,6 +36,7 @@ def compose1(f, g):
     """
     return lambda x: f(g(x))
 
+
 def composite_identity(f, g):
     """
     Return a function with one parameter x that returns True if f(g(x)) is
@@ -47,4 +51,13 @@ def composite_identity(f, g):
     >>> b1(4)                            # (4 + 1)^2 != 4^2 + 1
     False
     """
-    "*** YOUR CODE HERE ***"
+
+    def is_equal(x):
+        com1 = compose1(f, g)
+        com2 = compose1(g, f)
+        if com1(x) == com2(x):
+            return True
+        else:
+            return False
+
+    return is_equal
