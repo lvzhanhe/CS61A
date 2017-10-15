@@ -19,7 +19,7 @@ To spice up the game, we will play with some special rules:
 
 
 
-You can also play against your final strategy with the graphical user interface:
+You can play against your final strategy with the graphical user interface:
 
 ```
 python3 hog_gui.py -f
