@@ -59,7 +59,9 @@ def product(n, term):
     >>> product(5, square)   # 1^2 * 2^2 * 3^2 * 4^2 * 5^2
     14400
     """
-    "*** YOUR CODE HERE ***"
+    for x in range(1, n + 1):
+        sum *= term(x)
+    return sum
 
 
 # The identity function, defined using a lambda expression!
