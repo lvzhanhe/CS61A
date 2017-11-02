@@ -59,6 +59,7 @@ def product(n, term):
     >>> product(5, square)   # 1^2 * 2^2 * 3^2 * 4^2 * 5^2
     14400
     """
+    sum = 1
     for x in range(1, n + 1):
         sum *= term(x)
     return sum
@@ -79,8 +80,7 @@ def factorial(n):
     >>> check(HW_SOURCE_FILE, 'factorial', ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    return product(n, identity)
 
 
 def make_adder(n):
@@ -92,8 +92,7 @@ def make_adder(n):
     >>> make_adder(1)(2)
     3
     """
-    "*** YOUR CODE HERE ***"
-    # return lambda ________________
+    return lambda x: x + n
 
 
 def accumulate(combiner, base, n, term):
@@ -112,7 +111,11 @@ def accumulate(combiner, base, n, term):
     >>> accumulate(mul, 2, 3, square)   # 2 * 1^2 * 2^2 * 3^2
     72
     """
-    "*** YOUR CODE HERE ***"
+    if n == 0:
+        return base
+    for i in range(1, n + 1):
+        base = combiner(base, term(i))
+    return base
 
 
 def summation_using_accumulate(n, term):
@@ -128,8 +131,7 @@ def summation_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    return accumulate(add, 0, n, term)
 
 
 def product_using_accumulate(n, term):
@@ -144,8 +146,7 @@ def product_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    return accumulate(mul, 1, n, term)
 
 
 def filtered_accumulate(combiner, base, pred, n, term):
@@ -173,7 +174,10 @@ def filtered_accumulate(combiner, base, pred, n, term):
     """
 
     def combine_if(x, y):
-        "*** YOUR CODE HERE ***"
+        if pred(y):
+            return combiner(x, y)
+        else:
+            return x
 
     return accumulate(combine_if, base, n, term)
 
@@ -201,7 +205,14 @@ def repeated(f, n):
     >>> repeated(square, 0)(5)
     5
     """
-    "*** YOUR CODE HERE ***"
+
+    def a(x):
+        base = x
+        for i in range(n):
+            base = f(base)
+        return base
+
+    return a
 
 
 def compose1(f, g):
