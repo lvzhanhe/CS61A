@@ -205,14 +205,18 @@ def repeated(f, n):
     >>> repeated(square, 0)(5)
     5
     """
-
-    def a(x):
-        base = x
-        for i in range(n):
-            base = f(base)
-        return base
-
-    return a
+    ######################################
+    #This is a tedious way
+    #
+    #def a(x):
+    #    base = x
+    #    for i in range(n):
+    #        base = f(base)
+    #    return base
+    #
+    #return a
+    ######################################
+    return accumulate(compose1, lambda x: x, n, lambda y: f)
 
 
 def compose1(f, g):
