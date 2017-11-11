@@ -1,5 +1,6 @@
 """Lab 3: Recursion and Tree Recursion"""
 
+
 # Q1
 def ab_plus_c(a, b, c):
     """Computes a * b + c.
@@ -11,7 +12,10 @@ def ab_plus_c(a, b, c):
     >>> ab_plus_c(3, 0, 2)  # 3 * 0 + 2
     2
     """
-    "*** YOUR CODE HERE ***"
+    if b == 0:
+        return c
+    return a + ab_plus_c(a, b - 1, c)
+
 
 # Q2
 def gcd(a, b):
@@ -27,7 +31,12 @@ def gcd(a, b):
     >>> gcd(40, 40)
     40
     """
-    "*** YOUR CODE HERE ***"
+    a, b = max(a, b), min(a, b)
+    if a % b == 0:
+        return b
+    else:
+        return gcd(b, a % b)
+
 
 # Q3
 def hailstone(n):
