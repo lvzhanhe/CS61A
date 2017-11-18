@@ -53,5 +53,15 @@ def hailstone(n):
     1
     >>> a
     7
+    notes:
+    n / 2 will return a float, while n // 2 will return a integer
     """
-    "*** YOUR CODE HERE ***"
+    if n == 1:
+        print(1)
+        return 1
+    if n % 2 == 0:
+        print(n)
+        return 1 + hailstone(n // 2)
+    else:
+        print(n)
+        return 1 + hailstone(3 * n + 1)
