@@ -1,5 +1,6 @@
 from lab03 import *
 
+
 # Q4
 def skip_mul(n):
     """Return the product of n * (n - 2) * (n - 4) * ...
@@ -9,10 +10,11 @@ def skip_mul(n):
     >>> skip_mul(8) # 8 * 6 * 4 * 2
     384
     """
-    if n == 2:
-        return 2
+    if n == 2 or n == 1:
+        return n
     else:
         return n * skip_mul(n - 2)
+
 
 # Q5
 def count_up(n):
@@ -25,9 +27,16 @@ def count_up(n):
     4
     5
     """
+
     def counter(i):
-        "*** YOUR CODE HERE ***"
+        print(i)
+        if i < n:
+            return counter(i + 1)
+        else:
+            return
+
     counter(1)
+
 
 # Q6
 def is_prime(n):
@@ -42,6 +51,7 @@ def is_prime(n):
     """
     "*** YOUR CODE HERE ***"
 
+
 # Q7
 def interleaved_sum(n, odd_term, even_term):
     """Compute the sum odd_term(1) + even_term(2) + odd_term(3) + ..., up
@@ -52,6 +62,7 @@ def interleaved_sum(n, odd_term, even_term):
     29
     """
     "*** YOUR CODE HERE ***"
+
 
 # Q8
 def ten_pairs(n):
